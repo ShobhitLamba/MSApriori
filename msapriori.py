@@ -1,6 +1,7 @@
 # Authors : Shobhit Lamba, Sakshi Panday
 # Email Address : slamba4@ uic.edu, spanda7@uic.edu
 
+import os
 import itertools
 
 phi = 0.0
@@ -19,6 +20,8 @@ cannotBeTogether = list()
 mustHave = list()
 tailCount = {}
 
+script_dir = os.path.dirname(__file__)
+
 def main():
     readData()
     initPass()
@@ -33,7 +36,10 @@ def main():
 def readData():
     '''To read the MIS values and phi (SDC) from parameterfile.txt'''
     global MS, TCount, IList, ICount, phi, TList, cannotBeTogether, mustHave
-    file1 = open('para2-1.txt')
+    
+    rel_path_params = "parameters/para1-1.txt"
+    abs_filepath_params = os.path.join(script_dir, rel_path_params)
+    file1 = open(abs_filepath_params)
 
 
     for i in file1:
@@ -63,7 +69,10 @@ def readData():
         ICount[int(item)] = 0
 
     '''To read the Transactions from inputdata.txt'''
-    file2 = open('data2.txt')
+    rel_path_data = "data/data1.txt"
+    abs_filepath_data = os.path.join(script_dir, rel_path_data)
+    file2 = open(abs_filepath_data)
+
 
     for i in file2:
         TList.append(list())
@@ -190,7 +199,11 @@ def mustHaveConstraint():
 def output():
     global FList, tailCount, ICount, CDict
     FList = [x for x in FList if x != []]
-    file3 = open("result2-1.txt", "w")
+    
+    rel_path_results = "results/result1-1.txt"
+    abs_filepath_results = os.path.join(script_dir, rel_path_results)
+    file3 = open(abs_filepath_results, "w")
+    
     count = 0
     print ("Frequent 1-itemsets")
     file3.write("\nFrequent 1-itemsets\n")
@@ -220,10 +233,6 @@ def output():
               file3.write('Tail Count = ' + str(tailCount[tuple(t)]) + "\n")
          print ('\n\tTotal number of frequent', str(i+1) + '-itemsets = ' ,count)
          file3.write('\n\tTotal number of frequent ' + str(i+1) + '-itemsets = '  + str(count) + "\n")
-
-
-
-
 
 
 if __name__ == "__main__": main()

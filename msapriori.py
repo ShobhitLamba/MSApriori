@@ -1,9 +1,11 @@
 # Authors : Shobhit Lamba, Sakshi Panday
 # Email Address : slamba4@ uic.edu, spanda7@uic.edu
 
+# Importing the required libraries
 import os
 import itertools
 
+# Initializing the datastructures and constants
 phi = 0.0
 MS = dict()
 temp = dict()
@@ -22,6 +24,7 @@ tailCount = {}
 
 script_dir = os.path.dirname(__file__)
 
+# All functions run here according to MSApriory
 def main():
     readData()
     initPass()
@@ -32,7 +35,7 @@ def main():
         mustHaveConstraint()
     output()
 
-
+# Reading data
 def readData():
     '''To read the MIS values and phi (SDC) from parameterfile.txt'''
     global MS, TCount, IList, ICount, phi, TList, cannotBeTogether, mustHave
@@ -84,6 +87,7 @@ def readData():
 
     TCount = len(TList)
 
+# Making the initial pass
 def initPass():
     global L
     for i in range(len(IList)):
@@ -96,7 +100,7 @@ def initPass():
     for i in range(len(L)):
         MISSortDict[L[i]] = i
 
-
+# Generating candidates for Level 2 which works differently as compared to other levels
 def level2CandidateGeneration():
     global CList, L
     for l in range (0, len(L)):
@@ -109,9 +113,11 @@ def level2CandidateGeneration():
     CList[2].sort(key = lambda row: row[1])
 
 
+# Using itertools to find subsets
 def findSubsets(S,m):
     return list(set(itertools.combinations(S, m)))
 
+Candidate Generatio for levels other than 2
 def MSCandidateGeneration(n):
     m = n - 1
     k = 0
@@ -133,6 +139,7 @@ def MSCandidateGeneration(n):
             
             k=0
 
+# Adding 1-Itemsets to the FList
 def F1():
     global FList
     if(not FList[1]):
@@ -140,7 +147,7 @@ def F1():
             if((ICount.get(L[i])/TCount)>=MS.get(L[i])):
                 FList[1].append([L[i]])
 
-
+# Adding i-Itemsets to the FList
 def Fi():
     global FList, CDict, tailCount
     k = 2
@@ -173,7 +180,7 @@ def Fi():
                     FList[k].append(c[:])
         k += 1
 
-
+# Checking the cannot-be-together constraint as defined in the project
 def cannotBeTogetherConstraint():
     global cannotBeTogether, FList
     for fListIndex in range(len(FList)):
@@ -186,6 +193,7 @@ def cannotBeTogetherConstraint():
                         break
             listIndex = listIndex - 1
 
+# Checking the must-have constraint as defined in the project
 def mustHaveConstraint():
     global mustHave, FList
     for fListIndex in range(len(FList)):
@@ -196,6 +204,7 @@ def mustHaveConstraint():
                 FList[fListIndex].pop(FList[fListIndex].index(subset))
             listIndex = listIndex - 1
 
+# Generating and writing output to text file
 def output():
     global FList, tailCount, ICount, CDict
     FList = [x for x in FList if x != []]
@@ -223,7 +232,6 @@ def output():
          for t in FList[i]:
               tCount = 0
               for j in range(len(TList)):
-#                    print(TList[i],'  t:',t)
                     if(set(TList[j]) >= set(t)):
                         tCount += 1
               count += 1
